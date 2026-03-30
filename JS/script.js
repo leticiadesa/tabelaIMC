@@ -1,24 +1,43 @@
-import { calcularImc, definirClassificacao } from './opc.js';
+import { calcularImc, classificarImc } from "./opc.js";
 
-// Seleciona todas as linhas da tabela
-const linhas = document.querySelectorAll('tbody tr');
+let input = document.querySelector('.entrada')
 
-linhas.forEach(linha => {
+let linhas = document.querySelectorAll("tbody tr");
 
-    const colunas = linha.children;
+linhas.forEach(function (linha) {
+    let altura = parseFloat(linha.children[2].textContent);
+    let peso = parseFloat(linha.children[3].textContent);
 
-    const altura = Number(colunas[2].textContent);
-    const peso = Number(colunas[3].textContent);
+    let imc = calcularImc(peso, altura);
 
-    const tdImc = colunas[4];
-    const tdClassificacao = colunas[5];
+    let classificacao = classificarImc(imc);
 
-    // Calcula IMC
-    const imc = calcularImc(peso, altura);
+    linha.children[4].textContent = imc.toFixed(1);
+    linha.children[5].textContent = classificacao;
+});
 
-    // Exibe IMC
-    tdImc.textContent = imc.toFixed(2);
+linhas.forEach(function (linha) {
+    if (linha.children[5].textContent === "Abaixo do peso" || linha.children[5].textContent === "Obesidade Grau III (Mórbida)") {
+        linha.classList.add("extremo");
+    }
+    else if (linha.children[5].textContent === "Peso normal") {
+        linha.classList.add("normal");
+    }
+    else {
+        linha.classList.add("outros");
+    }
+});
 
-    // Define classificação + estilos
-    definirClassificacao(imc, tdClassificacao);
+input.addEventListener('input', () => {
+    let busca = input.value.toLowerCase();
+
+    linhas.forEach(linha => {
+        let texto = linha.children[5].textContent.toLowerCase();
+
+        if (texto.includes(busca)) {
+            linha.classList.remove("invisivel");
+        } else {
+            linha.classList.add("invisivel");
+        }
+    });
 });
