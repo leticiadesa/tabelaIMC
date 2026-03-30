@@ -2,50 +2,24 @@ export function calcularImc(peso, altura) {
     return peso / (altura * altura);
 }
 
-export function definirClassificacao(imc, tdClassificacao) {
-
-    const linha = tdClassificacao.parentElement;
-    const colunas = linha.querySelectorAll("td");
-
-    // LIMPAR TUDO (ESSENCIAL)
-    linha.classList.remove("normal", "alerta");
-
-    colunas.forEach(td => {
-        td.classList.remove("critico");
-    });
-
-    // 🔴 CRÍTICO
-    if (imc < 18.5 || imc >= 40) {
-        tdClassificacao.textContent = imc < 18.5 
-            ? "Abaixo do Peso" 
-            : "Obesidade Grau 3";
-
-        colunas.forEach(td => td.classList.add("critico"));
+export function classificarImc(imc) {
+    if (imc < 18.5) {
+        return "Abaixo do peso";
     }
-
-    // 🟢 NORMAL
     else if (imc < 25) {
-        tdClassificacao.textContent = "Peso Normal";
-
-        linha.classList.add("normal");
+        return "Peso normal";
     }
-
-    // 🟠 OUTROS
     else if (imc < 30) {
-        tdClassificacao.textContent = "Sobrepeso";
-
-        linha.classList.add("alerta");
+        return "Sobrepeso";
     }
-
     else if (imc < 35) {
-        tdClassificacao.textContent = "Obesidade Grau 1";
-
-        linha.classList.add("alerta");
+        return "Obesidade Grau I";
     }
-
+    else if (imc < 40) {
+        return "Obesidade Grau II";
+    }
     else {
-        tdClassificacao.textContent = "Obesidade Grau 2";
-
-        linha.classList.add("alerta");
+        return "Obesidade Grau III (Mórbida)";
     }
+}
 }
